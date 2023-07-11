@@ -1,0 +1,1 @@
+# acceptcoin-magento

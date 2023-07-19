@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="frame-src">
+            <values>
+                <value id="acceptcoin_frame" type="host">https://dev7.itlab-studio.com</value>
+                <value id="acceptcoin_frame_ac" type="host">https://acceptcoin.io</value>
+            </values>
+        </policy>
+        <policy id="script-src">
+            <values>
+                <value id="acceptcoin_scripts" type="host">https://dev7.itlab-studio.com</value>
+                <value id="acceptcoin_scripts_ac" type="host">https://acceptcoin.io</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="acceptcoin_styles" type="host">https://dev7.itlab-studio.com</value>
+                <value id="acceptcoin_styles_ac" type="host">https://acceptcoin.io</value>
+            </values>
+        </policy>
+        <policy id="media-src">
+            <values>
+                <value id="acceptcoin_media" type="host">https://dev7.itlab-studio.com</value>
+                <value id="acceptcoin_media_ac" type="host">https://acceptcoin.io</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="acceptcoin_img" type="host">https://dev7.itlab-studio.com</value>
+                <value id="acceptcoin_img_ac" type="host">https://acceptcoin.io</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="acceptcoin" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Acceptcoin</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="ac_project_id" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Project ID</label>
+                    <comment><![CDATA[Id of your project. <a href = "https://acceptcoin.io/" target = "_blank">Register here to get it</a>.]]></comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="ac_secret_key" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Project Secret ID</label>
+                    <comment><![CDATA[Your secret key. <a href = "https://acceptcoin.io/" target = "_blank">Register here to get it</a>.]]></comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="ac_return_url_success" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Successful status URL</label>
+                    <comment><![CDATA[Redirect URL after successful payment.]]></comment>
+                </field>
+                <field id="ac_return_url_fail" translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Failed status URL</label>
+                    <comment><![CDATA[Redirect URL after failed payment.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

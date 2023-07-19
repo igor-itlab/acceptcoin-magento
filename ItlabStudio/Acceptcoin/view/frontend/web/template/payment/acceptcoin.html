@@ -1,0 +1,80 @@
+<style>
+    .pay-btn {
+        margin: 0 auto;
+        padding: 12px 16px;
+        font-weight: 600;
+        text-align: center;
+        color: rgb(255, 255, 255);
+        display: block;
+        background-color: #1d2327;
+        border: #1d2327;
+        border-radius: 5px;
+        transition: all 0.3s ease 0s;
+        cursor: pointer;
+    }
+
+    .pay-btn:hover {
+        background-color: black;
+        transition: all 1s ease;
+    }
+
+    .iframe {
+        min-height: 560px;
+        width: 100%;
+    }
+
+    .acceptcoin-list-field {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .description-title {
+        margin: 0 0 15px 0 !important;
+        text-align: center;
+    }
+
+    .acceptcoin-payment-icon {
+        max-width: 40px;
+    }
+</style>
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice acceptcoin-list-field">
+        <input
+            type="radio"
+            name="payment[method]"
+            class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
+        />
+        <img data-bind="attr: {src: getAcceptCoinLogo(), alt: $t('Accept Coin Logo')}" class="acceptcoin-payment-icon" />
+        <label class="label" data-bind="attr: {'for': getCode()}">
+            <span data-bind="text: getTitle()"></span>
+        </label>
+    </div>
+
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <div class="field required">
+            <div class="frame-body" id="acceptcoin-iframe-body">
+                <p class="description-title">Pay with cryptocurrency with Acceptcoin</p>
+                <button
+                    class="action checkout pay-btn"
+                    type="submit"
+                    data-bind="click: placeOrder, attr: {title: $t('Pay')}"
+                >
+                    <span data-bind="i18n: 'Pay'"></span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

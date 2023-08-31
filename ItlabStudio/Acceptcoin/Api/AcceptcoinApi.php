@@ -3,6 +3,7 @@
 namespace ItlabStudio\Acceptcoin\Api;
 
 use Exception;
+use ItlabStudio\Acceptcoin\Services\ACUtils;
 use ItlabStudio\Acceptcoin\Services\JWT;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
@@ -10,7 +11,7 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Api
+class AcceptcoinApi
 {
     public const PREFIX         = "ACMG";
     public const STATUS_PENDING = "pending";
@@ -20,7 +21,8 @@ class Api
 
     public const ERROR_MESSAGE = "Acceptcoin payment method is not available at this moment.";
 
-    public const DOMAIN = "https://acceptcoin.io";
+//    public const DOMAIN = "https://acceptcoin.io";
+    public const DOMAIN = "https://dev7.itlab-studio.com";
 
     /**
      * @param Order $order
@@ -32,6 +34,7 @@ class Api
      * @param string|null $returnUrlFailed
      * @return mixed
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public static function createRequest(
         Order                 $order,
@@ -39,15 +42,13 @@ class Api
         string                $projectSecret,
         Curl                  $curl,
         StoreManagerInterface $storeManager,
-        ?string                $returnUrlSuccess,
-        ?string                $returnUrlFailed
+        ?string               $returnUrlSuccess,
+        ?string               $returnUrlFailed
     ): mixed
     {
         if (empty($projectId) || empty($projectSecret)) {
             throw new Exception("Missing Accept Coin configuration");
         }
-
-        $totalPrice = $order->getGrandTotal();
 
         $referenceId = self::PREFIX . "-" . substr($projectId, 0, self::PROJECT_ID_SYMBOLS_NUM) . "-" . $order->getIncrementId();
 
@@ -62,7 +63,11 @@ class Api
         ]);
 
         $params = [
-            "amount"      => (string)$totalPrice,
+            "amount"      => (string)ACUtils::convertAmount(
+                $order->getBaseGrandTotal(),
+                $order->getBaseCurrencyCode(),
+                ACUtils::STABLE_CURRENCY_CODE
+            ),
             "referenceId" => $referenceId,
             "callBackUrl" => $callbackUrl
         ];

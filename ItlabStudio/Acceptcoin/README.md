@@ -1,4 +1,4 @@
-=== Acceptcoin ===
+# Acceptcoin
 
 Contributors: acceptcoin
 Donate link: https://acceptcoin.io
@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 AcceptCoin is an innovative-integrated payment gateway for accepting cryptocurrencies as payment for the purchase of goods and services on the seller's website. Powered by IT Lab Studio.
-== Description ==
+#### DESCRIPTION 
 
 Bitcoin, Litecoin, Ripple, Tether and other cryptocurrencies are becoming more and more popular
 all over the world. Today, they are used in many fields of activity, including online trading or for paying for services.
@@ -39,11 +39,41 @@ Download and install the AcceptCoin plugin, set up a commercial project and acce
 - Payment is calculated using real-time cryptocurrency exchange rates. The rate is fixed at the time of payment.
 - While customers can pay for a product/service with dozens of different cryptocurrencies, you can receive payments in one (or several) currencies - EUR, USD, BTC or other cryptocurrencies.
 
-== Installation ==
+#### INSTALLATION
 
-1. Install via the searchable Plugin Directory within your WordPress site's plugin page.
-1. (Or: Upload `acceptcoin-cryptocurrency-payment-gateway-for-woocommerce.php` to the `/wp-content/plugins/` directory.)
-1. Activate the plugin through the 'Plugins' menu in WordPress.
+###### Log in to your plugin's admin panel.
+
+###### Loading the plugin on "Magento".
+1. Performed with the help of your site developer;
+  
+(і) You can also enable or disable the plugin after downloading it.
+   Creating a project in Acceptcoin.
+2. Login to your personal "Acceptcoin" account;
+3. Go to the "Projects" section;
+4. Fill in the "Project name" and "site URL" fields and click "Create";
+5. You need the Acceptcoin administrator to activate and verify your project;
+6. Contact the Acceptcoin administrator to enable the payment method you need;
+   (і) Different payment methods can be enabled for each project.
+7. You can enable the payment method that you requested from the administrator on your project;
+   (і) How to enable the payment method.
+   - Enter the personal account of "Acceptcoin";
+   - Go to the "Project" section;
+   - Select your project and enable the desired payment method in the “Payment method” tab.
+
+8. Add a trusted IP address. (IP address of your store). After adding a trusted IP address, the Acceptcoin administrator must confirm this action.
+   (і) You will not be able to make a payment without a verified IP address.
+
+Configuring the plugin.
+1. On the side panel, click the "Stores" button and select "Configuration";
+2. In the "Sales" block, click on the drop-down list and select "Payment methods";
+3. Find "Acceptcoin" and fill in the "Project ID" and "project Secret ID" fields and click "Save config".
+
+(і) Where to get "Project ID" and "Project Secret":
+- Login to your personal account “Acceptcoin”;
+- Go to the "Project" section;
+- Select your project and find the project data on the "General" tab:
+  ID - Project ID
+  Secret ID - Project Secret ID
 
 #### HOW DOES ACCEPTCOIN WORK?
 
@@ -60,3 +90,8 @@ Download and install the AcceptCoin plugin, set up a commercial project and acce
 
 1. After successful payment, the seller will see his funds on the AcceptCoin admin panel.
 2. The possibility of withdrawing funds to a bank card is available. If you have chosen cryptocurrency, you can withdraw funds to any wallet from your dashboard account at any time.
+
+#### FREQUENTLY ASKED QUESTIONS
+
+1. Where can I obtain information about the paid amount for order?
+- You can access details about the paid amount in the order's invoice details after the order has been paid.

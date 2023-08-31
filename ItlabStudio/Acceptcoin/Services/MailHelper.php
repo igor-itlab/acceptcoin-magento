@@ -8,6 +8,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
 
 class MailHelper extends AbstractHelper
@@ -74,6 +75,40 @@ class MailHelper extends AbstractHelper
         } catch (Exception $exception) {
             $this->logger->debug($exception->getMessage());
         }
+    }
+
+    /**
+     * @param string $storeId
+     * @param string $receiverEmail
+     * @param string $template
+     * @param array $vars
+     * @return void
+     */
+    public function sendMessage(string $storeId, string $receiverEmail, string $template, array $vars): void
+    {
+        $storeEmail = $this->scopeConfig->getValue(
+            'trans_email/ident_general/email',
+            ScopeInterface::SCOPE_STORES,
+            $storeId
+        );
+
+        $storeName = $this->scopeConfig->getValue(
+            'trans_email/ident_general/name',
+            ScopeInterface::SCOPE_STORES,
+            $storeId
+        );
+
+        $this->sendEmail(
+            [
+                "id"    => $storeId,
+                'email' => $storeEmail,
+                'name'  => $storeName
+            ],
+            $receiverEmail,
+            $template,
+            $vars
+        );
+
     }
 
 }

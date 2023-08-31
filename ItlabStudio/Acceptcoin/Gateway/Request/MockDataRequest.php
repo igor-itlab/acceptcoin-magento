@@ -3,8 +3,10 @@
 namespace ItlabStudio\Acceptcoin\Gateway\Request;
 
 use Exception;
-use ItlabStudio\Acceptcoin\Api\Api;
+use ItlabStudio\Acceptcoin\Api\AcceptcoinApi;
+use ItlabStudio\Acceptcoin\Services\MailHelper;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Payment\Gateway\ConfigInterface;
@@ -41,17 +43,31 @@ class MockDataRequest implements BuilderInterface
      */
     private Session $checkoutSession;
 
+    /**
+     * @var MailHelper
+     */
+    private MailHelper $mailHelper;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
     public function __construct(
         Curl                  $curl,
         Session               $checkoutSession,
         ConfigInterface       $config,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        MailHelper            $mailHelper,
+        ScopeConfigInterface  $scopeConfig
     )
     {
         $this->curl = $curl;
         $this->checkoutSession = $checkoutSession;
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->mailHelper = $mailHelper;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -76,7 +92,7 @@ class MockDataRequest implements BuilderInterface
             $returnUrlSuccess = $this->config->getValue('ac_return_url_success', $paymentDO->getOrder()->getStoreId());
             $returnUrlFailed = $this->config->getValue('ac_return_url_fail', $paymentDO->getOrder()->getStoreId());
 
-            $link = Api::createRequest(
+            $link = AcceptcoinApi::createRequest(
                 $payment->getOrder(),
                 $projectId,
                 $projectSecret,
@@ -85,7 +101,23 @@ class MockDataRequest implements BuilderInterface
                 $returnUrlSuccess,
                 $returnUrlFailed
             );
+
             $this->checkoutSession->setacceptcoinIframeLink($link);
+
+            $this->mailHelper->sendMessage(
+                $paymentDO->getOrder()->getStoreId(),
+                $paymentDO->getOrder()->getShippingAddress()->getEmail(),
+                'order_created_template',
+                [
+                    'subject'  => "Payment created for " .
+                        $this->storeManager->getStore($paymentDO->getOrder()->getStoreId())->getName(),
+                    "link"     => $link,
+                    "name"     => $payment->getOrder()->getCustomerFirstname(),
+                    "lastname" => $payment->getOrder()->getCustomerLastname(),
+                    "amount"   => $payment->getOrder()->getGrandTotal(),
+                    "currency" => $paymentDO->getOrder()->getCurrencyCode()
+                ]
+            );
         } catch (Throwable $exception) {
             throw new LocalizedException(__($exception->getMessage()));
         }

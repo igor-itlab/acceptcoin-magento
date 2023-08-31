@@ -24,6 +24,7 @@ define([
                     "Accept": "application/json"
                 }
             }).then(response => response.json()).then(data => {
+                console.log(data);
                 let iframeBody = document.getElementById("acceptcoin-iframe-body");
                 let iframe = JSON.parse(data);
 

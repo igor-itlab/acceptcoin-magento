@@ -9,4 +9,12 @@
         module="ItlabStudio_Acceptcoin"
         area="frontend"
     />
+    <template
+        id="order_created_template"
+        label="Template for email after the order was created"
+        file="order_created.html"
+        type="html"
+        module="ItlabStudio_Acceptcoin"
+        area="frontend"
+    />
 </config>

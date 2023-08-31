@@ -3,8 +3,9 @@
 namespace ItlabStudio\Acceptcoin\Model\Api;
 
 use Exception;
-use ItlabStudio\Acceptcoin\Api\Api;
+use ItlabStudio\Acceptcoin\Api\AcceptcoinApi;
 use ItlabStudio\Acceptcoin\Api\Web\CallbackManagementInterface;
+use ItlabStudio\Acceptcoin\Services\ACUtils;
 use ItlabStudio\Acceptcoin\Services\MailHelper;
 use ItlabStudio\Acceptcoin\Services\Signature;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -27,7 +28,7 @@ class CallbackManagement implements CallbackManagementInterface
         "FROZEN_DUE_AML" => Order::STATE_CANCELED
     ];
 
-    private const PENDING_STATUSES = [Order::STATE_PENDING_PAYMENT, Api::STATUS_PENDING];
+    private const PENDING_STATUSES = [Order::STATE_PENDING_PAYMENT, AcceptcoinApi::STATUS_PENDING];
 
     /**
      * @var Transaction
@@ -156,21 +157,36 @@ class CallbackManagement implements CallbackManagementInterface
         $order->setState($responseStatus)->setStatus($responseStatus);
 
         if ($order->getStatus() === Order::STATE_PROCESSING) {
-            $order->setTotalPaid($response['data']['amount']);
+            $processedAmount = ACUtils::convertAmount(
+                ACUtils::getProcessedAmount($response['data']),
+                ACUtils::STABLE_CURRENCY_CODE,
+                $order->getBaseCurrencyCode()
+            );
+
+            $order->setTotalPaid($processedAmount);
+            $order->setBaseTotalPaid($processedAmount);
+
             $this->createInvoice($order);
         }
 
         if ($response['data']['status']['value'] === "FROZEN_DUE_AML") {
             $emailVars = [
-                'subject'     => "AML error",
-                "name"        => $order->getCustomerFirstname(),
-                "lastname"    => $order->getCustomerLastname(),
-                "referenceId" => $response['data']['referenceId'],
-                "amount"      => $response['data']['amount'],
-                "currency"    => $response['data']['currency']['asset']
+                'subject'       => "Dirty coins were identified through AML checks",
+                "name"          => $order->getCustomerFirstname(),
+                "lastname"      => $order->getCustomerLastname(),
+                "referenceId"   => $response['data']['referenceId'],
+                "transactionId" => $response['data']['id'],
+                "date"          => date("Y-m-d H:i:s", $response['data']['createdAt']),
+                "amount"        => $response['data']['amount'],
+                "currency"      => $response['data']['projectPaymentMethods']['paymentMethod']['currency']['asset']
             ];
 
-            $this->sendMessage($order, $emailVars);
+            $this->mailHelper->sendMessage(
+                $order->getStoreId(),
+                $order['customer_email'],
+                'aml_frozen_template',
+                $emailVars
+            );
         }
 
         $this->repository->save($order);
@@ -191,6 +207,9 @@ class CallbackManagement implements CallbackManagementInterface
         }
 
         $invoice = $this->invoiceService->prepareInvoice($order);
+
+        $invoice->setGrandTotal($order->getTotalPaid());
+        $invoice->setBaseGrandTotal($order->getTotalPaid());
         $invoice->register();
         $invoice->pay();
         $this->invoiceRepository->save($invoice);
@@ -201,35 +220,5 @@ class CallbackManagement implements CallbackManagementInterface
 
         $transactionSave->save();
         $this->invoiceSender->send($invoice);
-    }
-
-    /**
-     * @param $order
-     * @param array $vars
-     * @return void
-     */
-    private function sendMessage($order, array $vars): void
-    {
-        $storeEmail = $this->scopeConfig->getValue(
-            'trans_email/ident_general/email',
-            ScopeInterface::SCOPE_STORES, $order->getStoreId()
-        );
-
-        $storeName = $this->scopeConfig->getValue(
-            'trans_email/ident_general/name',
-            ScopeInterface::SCOPE_STORES, $order->getStoreId()
-        );
-        $template = "aml_frozen_template";
-
-        $this->mailHelper->sendEmail(
-            [
-                "id"    => $order->getStoreId(),
-                'email' => $storeEmail,
-                'name'  => $storeName
-            ],
-            $order['customer_email'],
-            $template,
-            $vars
-        );
     }
 }

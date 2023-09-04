@@ -21,8 +21,7 @@ class AcceptcoinApi
 
     public const ERROR_MESSAGE = "Acceptcoin payment method is not available at this moment.";
 
-//    public const DOMAIN = "https://acceptcoin.io";
-    public const DOMAIN = "https://dev7.itlab-studio.com";
+    public const DOMAIN = "https://acceptcoin.io";
 
     /**
      * @param Order $order

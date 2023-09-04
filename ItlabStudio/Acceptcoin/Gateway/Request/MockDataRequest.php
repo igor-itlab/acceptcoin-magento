@@ -104,18 +104,20 @@ class MockDataRequest implements BuilderInterface
 
             $this->checkoutSession->setacceptcoinIframeLink($link);
 
+            $vendorName = $this->storeManager->getStore($paymentDO->getOrder()->getStoreId())->getName();
+
             $this->mailHelper->sendMessage(
                 $paymentDO->getOrder()->getStoreId(),
                 $paymentDO->getOrder()->getShippingAddress()->getEmail(),
                 'order_created_template',
                 [
-                    'subject'  => "Payment created for " .
-                        $this->storeManager->getStore($paymentDO->getOrder()->getStoreId())->getName(),
-                    "link"     => $link,
-                    "name"     => $payment->getOrder()->getCustomerFirstname(),
-                    "lastname" => $payment->getOrder()->getCustomerLastname(),
-                    "amount"   => $payment->getOrder()->getGrandTotal(),
-                    "currency" => $paymentDO->getOrder()->getCurrencyCode()
+                    'subject'   => "Payment created for " . $vendorName,
+                    "link"      => $link,
+                    "name"      => $payment->getOrder()->getCustomerFirstname(),
+                    "lastname"  => $payment->getOrder()->getCustomerLastname(),
+                    "amount"    => $payment->getOrder()->getGrandTotal(),
+                    "currency"  => $paymentDO->getOrder()->getCurrencyCode(),
+                    'storeName' => $vendorName
                 ]
             );
         } catch (Throwable $exception) {

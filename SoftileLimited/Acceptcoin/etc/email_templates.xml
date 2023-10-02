@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template
+        id="aml_frozen_template"
+        label="Template for aml frozen error"
+        file="aml_frozen_template.html"
+        type="html"
+        module="SoftileLimited_Acceptcoin"
+        area="frontend"
+    />
+    <template
+        id="order_created_template"
+        label="Template for email after the order was created"
+        file="order_created.html"
+        type="html"
+        module="SoftileLimited_Acceptcoin"
+        area="frontend"
+    />
+</config>

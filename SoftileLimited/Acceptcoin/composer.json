@@ -1,0 +1,41 @@
+{
+    "name": "itlab-studio/acceptcoin-magento",
+    "description": "Acceptcoin payment gateway provides ability to pay with cryptocurrency via accepcoin.io service",
+    "keywords": [
+        "acceptcoin",
+        "magento",
+        "payment gateway",
+        "cryptocurrency"
+    ],
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "../../../../vendor/magento/module-sales": "100.0.*",
+        "../../../../vendor/magento/module-checkout": "100.0.*",
+        "../../../../vendor/magento/module-payment": "100.0.*",
+        "../../../../vendor/magento/framework": "100.0.*",
+        "../../../../vendor/magento/magento-composer-installer": "100.0.*"
+    },
+    "type": "magento2-module",
+    "version": "1.0.2",
+    "license": [
+        "GPL-2.0",
+        "GPL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "Softile Limited",
+            "homepage": "https://softile.limited"
+        }
+    ],
+    "support": {
+        "email": "noreply@itlab-studio.com"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "SoftileLimited\\Acceptcoin\\": ""
+        }
+    }
+}
